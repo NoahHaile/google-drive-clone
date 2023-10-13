@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, collection } from 'firebase/firestore';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDztUaKGJj-rskOQd_SeW6l-PZdVPW9Cuk",
@@ -10,8 +11,17 @@ const firebaseConfig = {
     appId: "1:16002571480:web:fc8b414d156a01e92c8bad"
   };
 
+
+
 const app = initializeApp(firebaseConfig);
+const firestore = getFirestore(app);
+const foldersCollection = collection(firestore, 'folders');
+const filesCollection = collection(firestore, 'files');
+export const database = {
+  folders: foldersCollection,
+  files: filesCollection
+}
 const auth = getAuth(app);
 
-export { auth, createUserWithEmailAndPassword };
+export { auth };
 export default app;
