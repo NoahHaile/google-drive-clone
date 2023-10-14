@@ -65,10 +65,12 @@ export function useFolder(folderId = null, folder = null) {
     const folderRef = doc(database.folders, folderId);
 
     onSnapshot(folderRef, (docI) => {
-      dispatch({
-        type: ACTIONS.UPDATE_FOLDER,
-        payload: { folder: docI.data() },
-      });
+        const folderData = docI.data();
+        folderData.id = docI.id; // Set the document ID in the folderData object
+        dispatch({
+          type: ACTIONS.UPDATE_FOLDER,
+          payload: { folder: folderData },
+        });
     });
   }, [folderId]);
 
