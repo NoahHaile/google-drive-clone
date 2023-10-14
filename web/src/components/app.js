@@ -23,6 +23,7 @@ function App(){
                                     path="/"
                                     element={<PrivateRoute loggedIn={Dashboard} loggedOut={Login} />}
                                 />
+                                <Route path="/folder/:folderId" element={<Dashboard />} />
                                 <Route
                                     path="/user"
                                     element={<PrivateRoute loggedIn={Profile} loggedOut={Login} />}

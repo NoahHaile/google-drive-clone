@@ -85,7 +85,11 @@ export function useFolder(folderId = null, folder = null) {
     const unsubscribeChildFolders = onSnapshot(childFoldersQuery, (snapshot) => {
       dispatch({
         type: ACTIONS.SET_CHILD_FOLDERS,
-        payload: { childFolders: snapshot.docs.map((docI) => docI.data()) },
+        payload: { childFolders: snapshot.docs.map((docI) =>{
+             const folderData = docI.data();
+             folderData.id = docI.id;
+             return folderData;
+       }) },
       });
     });
 
