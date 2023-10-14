@@ -28,7 +28,7 @@ export default function AddFolderButton({ currentFolder }) {
     // if (currentFolder !== ROOT_FOLDER) {
     //   path.push({ name: currentFolder.name, id: currentFolder.id })
     // }
-    
+    console.log(currentFolder);
     const docRef = addDoc(database.folders, {
         name: name,
         parentId: currentFolder.id,
