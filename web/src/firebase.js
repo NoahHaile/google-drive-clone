@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection } from 'firebase/firestore';
 
+
 const firebaseConfig = {
     apiKey: "AIzaSyDztUaKGJj-rskOQd_SeW6l-PZdVPW9Cuk",
     authDomain: "auth-dev-93d51.firebaseapp.com",
@@ -17,9 +18,10 @@ const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
 const foldersCollection = collection(firestore, 'folders');
 const filesCollection = collection(firestore, 'files');
+
 export const database = {
   folders: foldersCollection,
-  files: filesCollection
+  files: filesCollection,
 }
 const auth = getAuth(app);
 
