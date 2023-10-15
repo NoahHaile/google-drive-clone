@@ -7,11 +7,12 @@ import Folder from './folder';
 import { useParams } from 'react-router-dom';
 import FolderBreadcrumbs from './folderBreadcrumbs';
 import AddFileButton from './addFileButton';
+import File from './file';
+
 
 function Dashboard() {
     const { folderId } = useParams();
-    const { folder, childFolders } = useFolder(folderId);
-    
+    const { folder, childFolders, childFiles } = useFolder(folderId);
     return ( 
         <>
         <NavDrive />
@@ -30,6 +31,20 @@ function Dashboard() {
                 className="p-2"
               >
                 <Folder folder={childFolder} />
+              </div>
+            ))}
+          </div>
+        )}
+        {childFolders.length > 0 && childFiles.length > 0 && <hr />}
+        {childFiles.length > 0 && (
+          <div className="d-flex flex-wrap">
+            {childFiles.map(childFile => (
+              <div
+                key={childFile.id}
+                style={{ maxWidth: "250px" }}
+                className="p-2"
+              >
+                <File file={childFile} />
               </div>
             ))}
           </div>
