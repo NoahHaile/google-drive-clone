@@ -96,6 +96,8 @@ export function useFolder(folderId = null, folder = null) {
     return unsubscribeChildFolders;
   }, [folderId, currentUser]);
 
+
+  
   useEffect(() => {
     const childFilesQuery = query(
       database.files,
@@ -106,7 +108,11 @@ export function useFolder(folderId = null, folder = null) {
     const unsubscribeChildFiles = onSnapshot(childFilesQuery, (snapshot) => {
       dispatch({
         type: ACTIONS.SET_CHILD_FILES,
-        payload: { childFiles: snapshot.docs.map((doc) => doc.data()) },
+        payload: { childFiles: snapshot.docs.map((docI) =>{
+            const filesData = docI.data();
+            filesData.id = docI.id;
+            return filesData;
+      }) },
       });
     });
 
