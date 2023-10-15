@@ -6,6 +6,7 @@ import { useFolder } from '../../hooks/useFolder';
 import Folder from './folder';
 import { useParams } from 'react-router-dom';
 import FolderBreadcrumbs from './folderBreadcrumbs';
+import AddFileButton from './addFileButton';
 
 function Dashboard() {
     const { folderId } = useParams();
@@ -17,7 +18,7 @@ function Dashboard() {
         <Container fluid>
             <div className="d-flex align-items-center">
                 <FolderBreadcrumbs currentFolder={folder} />
-                
+                <AddFileButton currentFolder={folder} />
                 <AddFolderButton currentFolder={folder} />
             </div>
             {childFolders.length > 0 && (

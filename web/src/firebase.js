@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection } from 'firebase/firestore';
+import { getStorage } from "firebase/storage";
 
 
 const firebaseConfig = {
@@ -24,6 +25,6 @@ export const database = {
   files: filesCollection,
 }
 const auth = getAuth(app);
-
+export const storage = getStorage(app);
 export { auth };
 export default app;
