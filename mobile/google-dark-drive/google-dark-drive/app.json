@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "app",
-    "slug": "app",
+    "name": "google-dark-drive",
+    "slug": "google-dark-drive",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,17 +22,14 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "READ_EXTERNAL_STORAGE"
-      ],
-      "package": "com.justletmebuild.app"
+      "package": "com.justletmebuild.googledarkdrive"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "6ea7254f-65cc-4bb9-acc4-63639911a9fb"
+        "projectId": "0e1de634-6ffb-449d-aa38-8d929a995ebe"
       }
     }
   }
