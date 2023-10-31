@@ -10,17 +10,14 @@ export default function FolderBreadcrumbsMove({ currentFolder, setFolder }) {
       {path.map((folder, index) => (
         <TouchableOpacity
           key={folder.id}
-          onPress={() => {
-            // Navigate to the folder or handle the link press as needed
-            setFolder(folder.id) // You need to implement this function
-          }}
+          onPress={() => setFolder(folder.id)}
           style={styles.crumb}
         >
-          <Text style={styles.crumbText}>{folder.name}</Text>
+          <Text style={styles.crumbText}>\{folder.name}</Text>
         </TouchableOpacity>
       ))}
       {currentFolder && currentFolder.name !== 'Root' && (
-        <Text style={styles.crumbText}>{currentFolder.name}</Text>
+        <Text style={styles.crumbText}>\{currentFolder.name}</Text>
       )}
     </View>
   );
@@ -29,8 +26,8 @@ export default function FolderBreadcrumbsMove({ currentFolder, setFolder }) {
 const styles = StyleSheet.create({
   breadcrumbsContainer: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a1a', // Dark background color
-    padding: 10,
+    backgroundColor: '#000',
+    padding: 8,
     margin: 0,
     flexGrow: 1,
   },
@@ -40,8 +37,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   crumbText: {
+    fontFamily: 'Roboto-Italic',
     textAlign: 'center',
-    color: 'white', // Font color
-    
+    color: '#6fc4f2',
+    fontSize: 16,
   },
 });
