@@ -73,8 +73,8 @@ export default function Dashboard({ navigation, route }: any) {
                 <Image
                 source={require('../../../assets/user.png')}
                   style={{
-                    width: 40,
-                    height: 40,
+                    width: 50,
+                    height: 50,
                     borderRadius: 50,}}
                 />
               )}
