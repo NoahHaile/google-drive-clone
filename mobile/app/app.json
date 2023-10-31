@@ -22,11 +22,18 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["READ_EXTERNAL_STORAGE"]
-      
+      "permissions": [
+        "READ_EXTERNAL_STORAGE"
+      ],
+      "package": "com.justletmebuild.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6ea7254f-65cc-4bb9-acc4-63639911a9fb"
+      }
     }
   }
 }

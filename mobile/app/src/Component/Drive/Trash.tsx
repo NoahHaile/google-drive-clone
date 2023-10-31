@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, ScrollView, Image } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  StyleSheet, Text, TextInput, View, TouchableOpacity,
+  ScrollView, Image, Animated, Easing, ImageBackground
+} from 'react-native';
 import { useAuth } from '../../Contexts/AuthContext';
 import Folder from './Folder';
 import File from './File';
@@ -10,51 +13,61 @@ import FolderBreadcrumbs from './FolderBreadcrumbs';
 import { database } from '../../Firebase';
 import { onSnapshot, query, where } from 'firebase/firestore';
 
-export default function Trash({ navigation }: any) {
-    const {currentUser} = useAuth();
-    const { folder, childFolders, childFiles } = useFolder('trash');
-    const [userDocument, setUserDocument] = useState(null);
-    const [refresh, setRefresh] = useState(false);
-    useEffect(() => {
-      const childUserImageQuery = query(
-        database.users,
-        where("userId", "==", currentUser.uid),
-        where("deleted", "==", false)
-      );
-    
-    const unsubscribe = onSnapshot(childUserImageQuery, (snapshot) => {
-      // Assuming you want to retrieve the first document that matches the query
+export default function Trash({ navigation }) {
+  const { currentUser } = useAuth();
+  const { folder, childFolders, childFiles } = useFolder('trash');
+  const [userDocument, setUserDocument] = useState(null);
+  const translateXAnim = useRef(new Animated.Value(-100)).current; // Initial position to the left
+
+  const slideIn = () => {
+    Animated.timing(translateXAnim, {
+      toValue: 0,
+      duration: 1000,
+      easing: Easing.bounce,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  useEffect(() => {
+    slideIn();
+
+    const childUserImageQuery = query(
+      database.users,
+      where("userId", "==", currentUser.uid),
+      where("deleted", "==", false)
+    );
+
+    const unsubscribeUser = onSnapshot(childUserImageQuery, (snapshot) => {
       if (snapshot.docs.length > 0) {
-        const userDocument = snapshot.docs[0].data();
-        setUserDocument(userDocument);
-        
-        // Now, you have the user document that matches the query
-        // You can update your state or perform any other operations here
-        console.log("User document:", userDocument);
+        const userDoc = snapshot.docs[0].data();
+        setUserDocument(userDoc);
       }
     });
-  
-    // Return a cleanup function to unsubscribe from the snapshot
-    return () => unsubscribe();
+
+    return () => {
+      unsubscribeUser();
+    }
   }, [currentUser.uid]);
-    return (
+
+  return (
+    <ImageBackground
+      source={require('../../../assets/nightSky2.jpg')}
+      style={styles.backgroundImage}
+    >
       <View style={styles.container}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')} />
-          {userDocument ? (
-            <Image
-              source={{ uri: userDocument.photo }}
-              style={styles.userPhoto}
-            />
-          ) : (
-            <Text>No user photo available</Text>
-          )}
+
+
+          <Animated.Text style={[styles.title, { transform: [{ translateX: translateXAnim }] }]}>
+            Trash
+          </Animated.Text>
         </View>
-  
+
         <ScrollView style={styles.contentContainer}>
-          
-          <Button title='Back to Root' onPress={() => navigation.navigate('Dashboard', {folderId: null,})} />
-  
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Dashboard', { folderId: null })}>
+            <Text style={styles.backButtonText}>Back to Root</Text>
+          </TouchableOpacity>
+
           {childFolders.length > 0 && (
             <View style={styles.folderContainer}>
               {childFolders.map((childFolder) => (
@@ -62,42 +75,81 @@ export default function Trash({ navigation }: any) {
               ))}
             </View>
           )}
-  
-          {childFiles.length > 0 && (
+
+          {childFiles.length > 0 ? (
             <View style={styles.fileContainer}>
               {childFiles.map((childFile) => (
-                <File file={childFile} key={childFile.id} onDelete={setRefresh} />
+                <File file={childFile} key={childFile.id} onDelete={() => { }} />
               ))}
             </View>
+          ) : (
+            <Text style={styles.noFilesText}>No Files</Text>
           )}
         </ScrollView>
       </View>
-    );
-  }
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#1a1a1a', // Dark background color
-    },
-    buttonContainer: {
-      paddingHorizontal: 20,
-      paddingTop: 10,
-    },
-    contentContainer: {
-      paddingHorizontal: 20,
-    },
-    folderContainer: {
-      marginTop: 20,
-    },
-    fileContainer: {
-      marginTop: 20,
-    },
-    userPhoto: {
-      width: 100,
-      height: 100,
-      borderRadius: 50,
-      marginBottom: 10,
-    },
-  });
+    </ImageBackground>
+  );
+}
 
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  container: {
+    flex: 1,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
+  contentContainer: {
+    paddingHorizontal: 20,
+  },
+  folderContainer: {
+    marginTop: 20,
+  },
+  fileContainer: {
+    marginTop: 40,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  userPhoto: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  title: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  backButton: {
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  backButtonText: {
+    color: '#1a1a1a',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  noFilesText: {
+    color: '#fff',
+    textAlign: 'center',
+    marginTop: 20,
+  },
+});

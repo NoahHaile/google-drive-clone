@@ -9,8 +9,8 @@ export default function Folder({ folder, navigation }) {
             folderId: `${folder.id}`,
         })}>
             <Image
-                source={require('../../../assets/folder3.png')}
-                style={{width: 50, height: 50}}
+                source={require('../../../assets/folder4.png')}
+                style={{width: 80, height: 80}}
             />
             <Text style={styles.folderName}>{folder.name.length > 8 ? `${folder.name.substring(0, 8)}...` : folder.name}</Text>
         </TouchableOpacity>
@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
   folderName: {
     flex: 1,
     textAlign: 'center',
-    fontSize: 12,
-    color: "black",
+    fontSize: 14,
+    color: "white",
     fontFamily: "Roboto-Italic"
   },
 
