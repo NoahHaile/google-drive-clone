@@ -21,11 +21,19 @@ export default function MoveFile({ moveFile, setDestination, setDisplay}) {
     const { folder, childFolders, childFiles } = useFolder(currentId);
     const [userDocument, setUserDocument] = useState(null);
     const [refresh, setRefresh] = useState(false);
+
+    const handleMoveHere = () => {
+      console.log(folder.id);
+      setDestination(folder.id);
+      setDisplay(false);
+      moveFile();
+    };
     
     return (
+      <View>
         <View style={styles.mainContainer}>
-            <Text style={styles.title2}>Pick a Folder{'\n'}and{'\n'}Move The File</Text>
-            <Button title='Move Here' onPress={()=> {console.log(folder.id); setDestination(folder.id); setDisplay(false); moveFile();}} />
+            
+            
             <FolderBreadcrumbsMove currentFolder={folder} setFolder={setCurrentId} />
             <ScrollView style={styles.contentContainer}>
                 <View style={styles.folderFileContainer}>
@@ -39,10 +47,19 @@ export default function MoveFile({ moveFile, setDestination, setDisplay}) {
                     </>
                     
                 )}
+
         
                 </View>
             </ScrollView>
+            <TouchableOpacity onPress={handleMoveHere} style={styles.moveButton}>
+              <Text style={styles.buttonText}>Move Here</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=> setDisplay(false)} style={styles.closeButton}>
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
         </View>
+        
+      </View>
       
     );
   }
@@ -51,7 +68,7 @@ export default function MoveFile({ moveFile, setDestination, setDisplay}) {
     mainContainer: {
       width: '100%',
       margin: 0,
-      backgroundColor: 'black',
+      backgroundColor: '#666',
     },
     backgroundImage: {
       flex: 1,
@@ -82,7 +99,7 @@ export default function MoveFile({ moveFile, setDestination, setDisplay}) {
       alignItems: 'center',
       justifyContent: 'space-between',
       padding: 10,
-      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+      backgroundColor: '#666',
     },
     nav: {
       flexDirection: 'row',
@@ -102,7 +119,8 @@ export default function MoveFile({ moveFile, setDestination, setDisplay}) {
     },
     contentContainer: {
       paddingHorizontal: 20,
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      backgroundColor: '#333',
+      height: '70%',
     },
     folderFileContainer: {
       flexDirection: 'row',
@@ -149,5 +167,30 @@ export default function MoveFile({ moveFile, setDestination, setDisplay}) {
       fontFamily: 'Roboto-Bold',
       color: 'black',
       fontSize: 13,
+    },
+    moveButton: {
+      backgroundColor: '#00cc00', // DodgerBlue color
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 5,
+      alignItems: 'center',
+      marginVertical: 10,
+      marginTop: 10,
+      alignSelf: 'center',
+    },
+    closeButton: {
+      backgroundColor: '#cc0000', // DodgerBlue color
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 5,
+      alignItems: 'center',
+      marginVertical: 10,
+      marginTop: 5,
+      alignSelf: 'center',
+    },
+    buttonText: {
+      fontFamily: 'Roboto-Bold',
+      color: '#fff',
+      fontSize: 18,
     },
   });

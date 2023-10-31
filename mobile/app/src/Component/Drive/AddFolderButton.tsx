@@ -1,14 +1,30 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { database } from "../../Firebase"
 import { addDoc, collection, serverTimestamp } from "firebase/firestore"
 import { useAuth } from "../../Contexts/AuthContext"
 import { ROOT_FOLDER } from "../../Hooks/useFolder"
-import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Modal, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Modal, Image, Animated, Easing } from 'react-native';
+import AddFileButton from "./AddFileButton"
 
 export default function AddFolderButton({ currentFolder }) {
   const [open, setOpen] = useState(false)
   const [name, setName] = useState("");
   const { currentUser } = useAuth();
+  const [scaleAnim, setScaleAnim] = useState(new Animated.Value(2.1)); // initial scale is 1
+
+    
+  const startAnimation = () => {
+    Animated.timing(scaleAnim, {
+      toValue: 1,
+      duration: 1000,
+      easing: Easing.bounce,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  useEffect(() => {
+    startAnimation();
+  }, []);
 
   function openModal() {
     setOpen(true)
@@ -40,10 +56,23 @@ export default function AddFolderButton({ currentFolder }) {
     closeModal()
   }
 
+  const dynamicStyle = {
+    transform: [
+      { scale: scaleAnim },
+      { rotate: scaleAnim.interpolate({
+          inputRange: [1, 1.5], // Adjust this range as per your scaling
+          outputRange: ['0deg', '45deg'], // Adjust output range as per your needed rotation
+        })
+      },
+    ],
+    width: 63,
+    height: 63,
+    marginLeft: 15,
+  };
   return (
     <View>
       <TouchableOpacity onPress={openModal}>
-                <Image source={require('../../../assets/createFolder.png')} style={{width: 40, height: 40, marginLeft: 15}} />
+                <Animated.Image source={require('../../../assets/addButton.png')} style={dynamicStyle} />
 
       </TouchableOpacity>
       <Modal
@@ -61,14 +90,18 @@ export default function AddFolderButton({ currentFolder }) {
         placeholder="Enter folder name"
       />
       <View style={styles.modalButtonContainer}>
-        <TouchableOpacity style={styles.modalButton1} onPress={closeModal}>
-          <Text style={styles.modalButtonText}>Close</Text>
-        </TouchableOpacity>
+        
         <TouchableOpacity style={styles.modalButton2} onPress={handleSubmit}>
           <Text style={styles.modalButtonText}>Add Folder</Text>
         </TouchableOpacity>
       </View>
+      <Text style={{fontSize: 15, fontFamily: 'Roboto-Bold'}}>OR</Text>
+      <AddFileButton currentFolder={currentFolder} />
     </View>
+    <TouchableOpacity style={styles.modalButton1} onPress={closeModal}>
+        <Text style={styles.modalButtonText}>Close</Text>
+    </TouchableOpacity>
+    
   </View>
 </Modal>
     </View>
@@ -107,10 +140,10 @@ const styles = StyleSheet.create({
   },
   modalButton1: {
     backgroundColor: '#700303',
-    padding: 5,
+    padding: 12,
     borderRadius: 5,
-    marginRight: 20,
-    width: '30%',
+    marginTop: 20,
+    width: '40%',
     alignItems: 'center',
     borderWidth: 0.8, // Border width
     borderColor: 'black', // Border color
@@ -144,6 +177,8 @@ const styles = StyleSheet.create({
   modalButtonText: {
     color: 'white',
     fontFamily: 'Roboto-Bold',
+    fontSize: 17,
   },
+  
 });
 
