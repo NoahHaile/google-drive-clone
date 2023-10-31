@@ -8,7 +8,7 @@ import { v4 as uuidV4 } from "uuid"
 import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage"
 import { getDocs, query, where, addDoc, updateDoc, collection } from "firebase/firestore";
 import { serverTimestamp } from "firebase/firestore";
-import { View, Text, Button, TouchableOpacity, ToastAndroid, Image } from 'react-native';
+import { StyleSheet, View, Text, Button, TouchableOpacity, ToastAndroid, Image } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 
 export default function AddFileButton({ currentFolder }) {
@@ -123,11 +123,45 @@ export default function AddFileButton({ currentFolder }) {
   }
 
   return (
-    <View>
-      <TouchableOpacity onPress={uploadMenu}>
-        <Image source={require('../../../assets/uploadFile2.png')} style={{width: 40, height: 40, marginLeft: 15, }} />
-      </TouchableOpacity>
+    <View style={{marginTop: 10}}>
+      <TouchableOpacity style={styles.modalButton2} onPress={uploadMenu}>
+          <Image source={require('../../../assets/uploading.gif')} style={{width: 30, height: 30}} />
+          <Text style={styles.modalButtonText}>Upload File</Text>
+        </TouchableOpacity>
       
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  modalButton2: {
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 10,
+    marginHorizontal: 20,
+    width: '100%',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#333', // Darker border color
+    borderStyle: 'dashed',
+    shadowColor: 'rgba(0, 0, 0, 1)', // Slight shadow with transparency
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 1, // Full shadow opacity
+    shadowRadius: 8,
+    // Add a linear gradient background to make it more interesting
+    // You may need to install 'react-native-linear-gradient' and import it
+    // gradient colors can be adjusted as per your preference
+    // For example, from white to a light shade of blue
+    // This adds a subtle gradient to the button's background
+    // You can adjust the 'start' and 'end' properties to control the gradient direction
+  },
+  
+  modalButtonText: {
+    color: '#333', // Dark text color
+    fontFamily: 'Roboto-Bold',
+    fontSize: 20,
+  },
+})

@@ -22,8 +22,8 @@ export default function Dashboard({ navigation, route }: any) {
     const slideInForm = () => {
       Animated.timing(translateXAnim, {
         toValue: 0, // Slide to the original position
-        duration: 1000,
-        easing: Easing.bounce,
+        duration: 600,
+        easing: Easing.cubic,
         useNativeDriver: true,
       }).start();
     };
@@ -55,13 +55,13 @@ export default function Dashboard({ navigation, route }: any) {
   }, [currentUser.uid]);
     return (
       <ImageBackground
-        source={require('../../../assets/leaves.jpg')}
+        source={require('../../../assets/nightSky2.jpg')}
         style={styles.backgroundImage}
       >
         <View style={styles.container}>
           <View style={styles.buttonContainer}>
             <Animated.Text style={[styles.title2, { transform: [{ translateX: translateXAnim }]}]}>
-            Google <Text style={styles.darkText}> Dark </Text> Drive
+            Google <Text style={styles.darkText}> DARK </Text> Drive
             </Animated.Text>
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
               {userDocument ? (
@@ -71,8 +71,11 @@ export default function Dashboard({ navigation, route }: any) {
                 />
               ) : (
                 <Image
-                source={require('../../../assets/AnonPhoto.png')}
-                  style={styles.userPhoto}
+                source={require('../../../assets/user.png')}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: 50,}}
                 />
               )}
             </TouchableOpacity>
@@ -88,11 +91,6 @@ export default function Dashboard({ navigation, route }: any) {
               <TouchableOpacity style={styles.fav} onPress={() => navigation.navigate('Fav') }>
                 <Text style={styles.favText}>Favorites</Text>
               </TouchableOpacity>
-            </View>
-            <View style={styles.nav2}>
-                
-                <AddFileButton currentFolder={folder} />
-                <AddFolderButton currentFolder={folder} /> 
             </View>
             
           </View>
@@ -120,6 +118,10 @@ export default function Dashboard({ navigation, route }: any) {
               )}
             </View>
           </ScrollView>
+          <View style={styles.overlayButton}>
+            <AddFolderButton currentFolder={folder} />
+          </View>
+          
         </View>
         </ImageBackground>
     );
@@ -143,23 +145,25 @@ export default function Dashboard({ navigation, route }: any) {
     title2: {
       fontFamily: 'Roboto-BoldItalic',
       fontSize: 25,
-      color: '#000', // Subheader color (a shade of light blue)
-      backgroundColor: 'lightblue', // Background color
+      padding: 8,
+      color: '#fff', // Subheader color (a shade of light blue)
+      backgroundColor: '#000033', // Background color
       textShadowColor: 'rgba(0, 0, 0, 0.75)', // Text shadow color
       textShadowOffset: { width: 2, height: 2 }, // Text shadow offset
       textShadowRadius: 5, // Text shadow radius
-      borderWidth: 1, // Border width
-      borderColor: 'lightblue', // Border color
+      borderWidth: 3, // Border width
+      borderColor: '#000055', // Border color
       borderRadius: 50,
+      borderStyle: 'solid',
     },
     darkText: {
-      fontFamily: 'Roboto-BoldItalic',
+      fontFamily: 'Roboto-Bold',
       fontSize: 25,
-      color: '#fff', // Subheader color (a shade of light blue)
-      backgroundColor: '#4f0903', // Background color
+      color: '#000', // Subheader color (a shade of light blue)
+      backgroundColor: '#FFDAB9', // Background color
       textShadowColor: 'rgba(0, 0, 0, 0.75)', // Text shadow color
-      textShadowOffset: { width: 2, height: 2 }, // Text shadow offset
-      textShadowRadius: 5, // Text shadow radius
+      textShadowOffset: { width: -2, height: 0 }, // Text shadow offset
+      textShadowRadius: 10, // Text shadow radius
       borderWidth: 1, // Border width
       borderColor: 'lightyellow', // Border color
       borderRadius: 50,
@@ -170,7 +174,7 @@ export default function Dashboard({ navigation, route }: any) {
       alignItems: 'center',
       justifyContent: 'space-between',
       padding: 10,
-      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      backgroundColor: 'rgba(255, 255, 255, 0.8)',
     },
     nav: {
       flexDirection: 'row',
@@ -186,11 +190,11 @@ export default function Dashboard({ navigation, route }: any) {
       justifyContent: 'flex-end',
       padding: 10,
       margin: 0,
-      backgroundColor: 'rgba(242, 203, 165, 1)',
+      backgroundColor: 'rgba(37, 37, 37, 1)',
     },
     contentContainer: {
       paddingHorizontal: 20,
-      backgroundColor: 'rgba(242, 203, 165, 1)',
+      backgroundColor: 'rgba(37, 37, 37, 0.01)',
     },
     folderFileContainer: {
       flexDirection: 'row',
@@ -209,22 +213,32 @@ export default function Dashboard({ navigation, route }: any) {
       borderRadius: 50,
     },
     trash: {
-      backgroundColor: '#000', // Background color
-      padding: 8,
-      width: '15%', // Adjust the width as needed
-      alignItems: 'center', // Center the button horizontally
-      borderRightWidth: 1, // Border width
-      borderColor: 'white', // Border color
-      borderStyle: 'solid',
+        backgroundColor: '#000',
+        padding: 8,
+        width: '20%',
+        alignItems: 'center',
+        borderLeftWidth: 5,
+        borderLeftColor: '#555',
+        borderRadius: 50,
+        borderStyle: 'solid',
+      
+      shadowColor: 'rgba(0, 0, 0, 0.2)', // Shadow color
+      shadowOffset: { width: 0, height: 2 }, // Shadow offset
+      shadowRadius: 4, // Shadow radius
+      shadowOpacity: 1, // Shadow opacity
     },
     fav: {
       backgroundColor: '#fff', // Background color
       padding: 8, // Padding to make it bigger
       width: '25%', // Adjust the width as needed
       alignItems: 'center', // Center the button horizontally
-      borderLeftWidth: 1,
-      borderColor: 'white', // Border color
-      borderStyle: 'solid',
+      borderWidth: 1,
+      borderColor: 'white',
+      
+      shadowColor: 'rgba(0, 0, 0, 0.2)', // Shadow color
+      shadowOffset: { width: 0, height: 2 }, // Shadow offset
+      shadowRadius: 4, // Shadow radius
+      shadowOpacity: 1, // Shadow opacity
     },
     trashText:
     {
@@ -237,6 +251,14 @@ export default function Dashboard({ navigation, route }: any) {
       fontFamily: 'Roboto-Bold',
       color: 'black',
       fontSize: 13,
+    },
+    overlayButton:
+    {
+      position: 'absolute',
+      backgroundColor: 'rgba(0, 0, 0, 0)',
+      zIndex: 999, // Set a high z-index to ensure it overlays other content
+      bottom: 30, // Set the distance from the top
+      right: 30,
     },
   });
 
